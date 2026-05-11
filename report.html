@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>점검 보고서 | Laporan Inspeksi</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDhmt-LqAYEkHDUyM08OaiEZRIOG9EkPdI",
+  authDomain: "check-lists-supermarket.firebaseapp.com",
+  projectId: "check-lists-supermarket",
+  storageBucket: "check-lists-supermarket.firebasestorage.app",
+  messagingSenderId: "574249240916",
+  appId: "1:574249240916:web:30b1859c7ea64cf34e20c1"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+window._db = db;
+window._firebase = { collection, getDocs, query, orderBy };
+
+onAuthStateChanged(auth, user => {
+  if(user) {
+    document.getElementById('auth-block').style.display='none';
+    document.getElementById('report-ui').style.display='block';
+  } else {
+    document.getElementById('auth-block').style.display='flex';
+    document.getElementById('report-ui').style.display='none';
+  }
+});
+</script>
+<style>
+:root {
+  --blue:#1F4E79;--blue2:#2E75B6;--blue-light:#DEEAF1;
+  --green:#1E7E34;--green-light:#D4EDDA;
+  --red:#C0392B;--red-light:#FADBD8;
+  --amber:#E67E22;--amber-light:#FEF3CD;
+  --gray:#F8F9FA;--border:#DEE2E6;--text:#212529;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Malgun Gothic','Noto Sans KR',Arial,sans-serif}
+body{background:#F0F2F5;color:var(--text);font-size:13px}
+
+/* AUTH */
+#auth-block{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#1F4E79}
+.auth-card{background:#fff;border-radius:12px;padding:40px 32px;width:340px;text-align:center}
+.auth-card h2{color:#1F4E79;font-size:18px;margin-bottom:6px}
+.auth-card p{color:#666;font-size:12px;margin-bottom:24px}
+.auth-input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;margin-bottom:10px;outline:none}
+.auth-input:focus{border-color:#1F4E79}
+.auth-btn{width:100%;padding:11px;background:#1F4E79;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
+.auth-err{font-size:12px;color:var(--red);margin-top:8px}
+
+/* CONTROL BAR */
+#report-ui{display:none}
+.control-bar{background:#1F4E79;padding:14px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.control-bar h1{color:#fff;font-size:15px;font-weight:700;margin-right:8px;white-space:nowrap}
+.ctrl-group{display:flex;align-items:center;gap:6px}
+.ctrl-label{color:rgba(255,255,255,.8);font-size:11px;white-space:nowrap}
+.ctrl-input{padding:6px 10px;border:1px solid rgba(255,255,255,.3);border-radius:6px;background:rgba(255,255,255,.15);color:#fff;font-size:12px;outline:none}
+.ctrl-input::-webkit-calendar-picker-indicator{filter:invert(1)}
+.ctrl-btn{padding:7px 16px;border-radius:6px;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
+.btn-load{background:#fff;color:#1F4E79}
+.btn-load:hover{background:#e8f0fe}
+.btn-print{background:#27AE60;color:#fff}
+.btn-print:hover{background:#1e8449}
+.spinner-bar{color:rgba(255,255,255,.7);font-size:12px}
+
+/* REPORT CONTENT */
+.report-wrap{max-width:960px;margin:24px auto;padding:0 16px 40px}
+
+/* COVER */
+.cover{background:#1F4E79;color:#fff;border-radius:12px;padding:32px 36px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px}
+.cover-left h2{font-size:22px;font-weight:700;margin-bottom:6px}
+.cover-left p{font-size:13px;opacity:.8;line-height:1.6}
+.cover-right{text-align:right}
+.cover-right .period{font-size:13px;opacity:.75}
+.cover-right .gen-date{font-size:11px;opacity:.6;margin-top:4px}
+
+/* SECTION */
+.section{margin-bottom:20px}
+.section-title{font-size:14px;font-weight:700;color:#1F4E79;padding:10px 0 8px;border-bottom:2px solid #1F4E79;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.kpi-card{background:#fff;border-radius:10px;padding:16px 12px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.08);border-top:3px solid #1F4E79}
+.kpi-card.green{border-top-color:var(--green)}
+.kpi-card.red{border-top-color:var(--red)}
+.kpi-card.amber{border-top-color:var(--amber)}
+.kpi-card.blue2{border-top-color:var(--blue2)}
+.kpi-val{font-size:28px;font-weight:700;color:#1F4E79;line-height:1.1}
+.kpi-card.green .kpi-val{color:var(--green)}
+.kpi-card.red .kpi-val{color:var(--red)}
+.kpi-card.amber .kpi-val{color:var(--amber)}
+.kpi-card.blue2 .kpi-val{color:var(--blue2)}
+.kpi-label{font-size:11px;color:#666;margin-top:4px;line-height:1.4}
+
+/* TABLES */
+.data-table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.data-table th{background:#1F4E79;color:#fff;padding:9px 12px;font-size:11px;font-weight:600;text-align:left}
+.data-table td{padding:9px 12px;font-size:12px;color:#212529;border-bottom:1px solid var(--border)}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:nth-child(even) td{background:#F8F9FA}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
+.badge.S{background:#D4EDDA;color:var(--green)}
+.badge.A{background:#D1ECF1;color:#0C5460}
+.badge.B{background:#FFF3CD;color:#856404}
+.badge.C{background:#FADBD8;color:var(--red)}
+.badge.D{background:#F8D7DA;color:#721C24}
+.grade-bar{height:8px;border-radius:4px;background:var(--border);overflow:hidden;margin-top:4px;min-width:60px}
+.grade-fill{height:100%;border-radius:4px;background:var(--green)}
+.grade-fill.low{background:var(--amber)}
+.grade-fill.bad{background:var(--red)}
+.rank-num{display:inline-block;width:22px;height:22px;border-radius:50%;background:#1F4E79;color:#fff;font-size:11px;font-weight:700;text-align:center;line-height:22px}
+.rank-num.top{background:var(--red)}
+
+/* CHARTS */
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.chart-box{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.chart-box h4{font-size:12px;font-weight:600;color:#495057;margin-bottom:12px}
+.chart-box canvas{max-height:220px}
+
+/* EMPLOYEE TABLE */
+.emp-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.emp-badge.active{background:#D4EDDA;color:var(--green)}
+
+/* FOOTER */
+.report-footer{text-align:center;font-size:11px;color:#aaa;margin-top:32px;padding-top:16px;border-top:1px solid var(--border)}
+
+/* EMPTY */
+.empty-msg{text-align:center;padding:40px;color:#aaa;font-size:13px}
+
+/* PRINT */
+@media print {
+  body{background:#fff}
+  .control-bar{display:none!important}
+  .report-wrap{max-width:100%;margin:0;padding:16px}
+  .cover{break-inside:avoid}
+  .section{break-inside:avoid}
+  .kpi-grid{grid-template-columns:repeat(5,1fr)}
+  .charts-row{grid-template-columns:1fr 1fr}
+  @page{size:A4;margin:15mm}
+}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .charts-row{grid-template-columns:1fr}
+  .control-bar{gap:8px}
+  .cover{padding:20px}
+  .cover-left h2{font-size:17px}
+}
+</style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div id="auth-block">
+  <div class="auth-card">
+    <h2>📋 점검 보고서</h2>
+    <p>관리자 계정으로 로그인해 주세요<br>Masuk dengan akun manajer</p>
+    <input class="auth-input" id="r-email" type="email" placeholder="이메일 / Email"
+      onkeydown="if(event.key==='Enter')rLogin()">
+    <input class="auth-input" id="r-pw" type="password" placeholder="비밀번호 / Password"
+      onkeydown="if(event.key==='Enter')rLogin()">
+    <button class="auth-btn" onclick="rLogin()">로그인 / Masuk</button>
+    <div class="auth-err" id="r-err"></div>
+  </div>
+</div>
+
+<!-- REPORT UI -->
+<div id="report-ui">
+  <div class="control-bar">
+    <h1>📊 점검 보고서</h1>
+    <div class="ctrl-group">
+      <span class="ctrl-label">시작일</span>
+      <input class="ctrl-input" type="date" id="date-from">
+    </div>
+    <div class="ctrl-group">
+      <span class="ctrl-label">종료일</span>
+      <input class="ctrl-input" type="date" id="date-to">
+    </div>
+    <button class="ctrl-btn btn-load" onclick="loadReport()">🔍 조회</button>
+    <button class="ctrl-btn btn-print" onclick="window.print()">🖨️ PDF 저장</button>
+    <span class="spinner-bar" id="loading-msg"></span>
+  </div>
+
+  <div class="report-wrap" id="report-content">
+    <div class="empty-msg">📅 날짜 범위를 선택하고 조회 버튼을 눌러주세요</div>
+  </div>
+</div>
+
+<script>
+// ── LOGIN ─────────────────────────────────────────
+async function rLogin(){
+  const email=document.getElementById('r-email').value.trim();
+  const pw=document.getElementById('r-pw').value;
+  const err=document.getElementById('r-err');
+  if(!email||!pw){err.textContent='이메일과 비밀번호를 입력하세요.';return;}
+  err.textContent='';
+  try{
+    const {signInWithEmailAndPassword,getAuth}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+    await signInWithEmailAndPassword(getAuth(),email,pw);
+  }catch(e){
+    const m={'auth/invalid-credential':'이메일 또는 비밀번호가 올바르지 않습니다.','auth/wrong-password':'비밀번호가 올바르지 않습니다.','auth/user-not-found':'등록되지 않은 이메일입니다.'};
+    err.textContent=m[e.code]||'로그인 오류: '+e.code;
+  }
+}
+
+// ── SET DEFAULT DATES ─────────────────────────────
+(function(){
+  const now=new Date();
+  const y=now.getFullYear(), m=String(now.getMonth()+1).padStart(2,'0');
+  document.getElementById('date-from').value=`${y}-${m}-01`;
+  document.getElementById('date-to').value=now.toISOString().split('T')[0];
+})();
+
+// ── LOAD DATA ─────────────────────────────────────
+let chartObjs=[];
+async function loadReport(){
+  const from=document.getElementById('date-from').value;
+  const to=document.getElementById('date-to').value;
+  if(!from||!to){alert('날짜 범위를 선택해 주세요.');return;}
+  const msg=document.getElementById('loading-msg');
+  msg.textContent='⏳ 데이터 불러오는 중...';
+  chartObjs.forEach(c=>c.destroy()); chartObjs=[];
+  try{
+    const {collection,getDocs,query,orderBy}=window._firebase;
+    const snap=await getDocs(query(collection(window._db,'submissions'),orderBy('submittedAt','desc')));
+    let all=snap.docs.map(d=>d.data());
+    // filter by date range
+    const data=all.filter(s=>s.date>=from && s.date<=to);
+    msg.textContent='';
+    renderReport(data, from, to);
+  }catch(e){
+    msg.textContent='❌ 오류: '+e.message;
+  }
+}
+
+// ── RENDER ────────────────────────────────────────
+function renderReport(data, from, to){
+  if(!data.length){
+    document.getElementById('report-content').innerHTML=
+      '<div class="empty-msg">📭 해당 기간에 점검 데이터가 없습니다</div>';
+    return;
+  }
+
+  const total=data.length;
+  const avgPass=Math.round(data.reduce((a,s)=>a+s.passRate,0)/total);
+  const totalIssues=data.reduce((a,s)=>a+(s.results?.filter(r=>r.state==='bad').length||0),0);
+  const branches=[...new Set(data.map(s=>s.branch))];
+  const employees=[...new Set(data.map(s=>s.name))];
+
+  // grade counts
+  const gradeCnt={S:0,A:0,B:0,C:0,D:0};
+  data.forEach(s=>{if(gradeCnt[s.grade]!==undefined)gradeCnt[s.grade]++;});
+
+  // branch stats
+  const branchStats={};
+  data.forEach(s=>{
+    if(!branchStats[s.branch])branchStats[s.branch]={count:0,passSum:0,issues:0,grades:{S:0,A:0,B:0,C:0,D:0}};
+    branchStats[s.branch].count++;
+    branchStats[s.branch].passSum+=s.passRate;
+    branchStats[s.branch].issues+=(s.results?.filter(r=>r.state==='bad').length||0);
+    if(branchStats[s.branch].grades[s.grade]!==undefined)branchStats[s.branch].grades[s.grade]++;
+  });
+
+  // issue items frequency
+  const issueCnt={};
+  data.forEach(s=>{
+    (s.results||[]).filter(r=>r.state==='bad').forEach(r=>{
+      const key=r.id+'|'+(r.id_||r.ko||r.id);
+      issueCnt[key]=(issueCnt[key]||0)+1;
+    });
+  });
+  const topIssues=Object.entries(issueCnt)
+    .sort((a,b)=>b[1]-a[1]).slice(0,10)
+    .map(([k,cnt])=>{const[id,name]=k.split('|');return{id,name,cnt};});
+
+  // date trend
+  const dateTrend={};
+  data.forEach(s=>{
+    if(!dateTrend[s.date])dateTrend[s.date]={cnt:0,passSum:0};
+    dateTrend[s.date].cnt++;
+    dateTrend[s.date].passSum+=s.passRate;
+  });
+  const trendDates=Object.keys(dateTrend).sort();
+  const trendPass=trendDates.map(d=>Math.round(dateTrend[d].passSum/dateTrend[d].cnt));
+  const trendCnt=trendDates.map(d=>dateTrend[d].cnt);
+
+  // employee stats
+  const empStats={};
+  data.forEach(s=>{
+    if(!empStats[s.name])empStats[s.name]={count:0,passSum:0,branch:s.branch};
+    empStats[s.name].count++;
+    empStats[s.name].passSum+=s.passRate;
+  });
+
+  const genDate=new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'});
+
+  document.getElementById('report-content').innerHTML=`
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-left">
+      <h2>📋 지점 점검 종합 보고서</h2>
+      <p>Laporan Komprehensif Inspeksi Cabang Supermarket</p>
+    </div>
+    <div class="cover-right">
+      <div class="period">📅 보고 기간: ${from} ~ ${to}</div>
+      <div class="gen-date">생성일: ${genDate}</div>
+    </div>
+  </div>
+
+  <!-- 1. KPI -->
+  <div class="section">
+    <div class="section-title">📊 1. 핵심 KPI 요약 / Ringkasan KPI</div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-val">${total}</div>
+        <div class="kpi-label">총 점검 건수<br>Total Inspeksi</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-val">${avgPass}%</div>
+        <div class="kpi-label">평균 양호율<br>Rata-rata Lulus</div>
+      </div>
+      <div class="kpi-card red">
+        <div class="kpi-val">${totalIssues}</div>
+        <div class="kpi-label">누적 미흡 항목<br>Total Item Kurang</div>
+      </div>
+      <div class="kpi-card amber">
+        <div class="kpi-val">${branches.length}</div>
+        <div class="kpi-label">점검 지점 수<br>Jumlah Cabang</div>
+      </div>
+      <div class="kpi-card blue2">
+        <div class="kpi-val">${employees.length}</div>
+        <div class="kpi-label">점검 직원 수<br>Jumlah Pemeriksa</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. BRANCH PERFORMANCE -->
+  <div class="section">
+    <div class="section-title">🏪 2. 지점별 성과 비교 / Perbandingan per Cabang</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>지점명 / Cabang</th>
+          <th style="text-align:center">점검 건수</th>
+          <th style="text-align:center">평균 양호율</th>
+          <th style="text-align:center">미흡 건수</th>
+          <th style="text-align:center">등급 분포</th>
+          <th style="text-align:center">종합</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${Object.entries(branchStats).sort((a,b)=>(b[1].passSum/b[1].count)-(a[1].passSum/a[1].count)).map(([branch,st])=>{
+          const avg=Math.round(st.passSum/st.count);
+          const gradeStr=Object.entries(st.grades).filter(([,v])=>v>0).map(([g,v])=>`<span class="badge ${g}">${g}:${v}</span>`).join(' ');
+          const topGrade=Object.entries(st.grades).sort((a,b)=>b[1]-a[1])[0][0];
+          const fillClass=avg>=90?'':avg>=70?'low':'bad';
+          return `<tr>
+            <td><strong>${branch}</strong></td>
+            <td style="text-align:center">${st.count}</td>
+            <td style="text-align:center">
+              ${avg}%
+              <div class="grade-bar"><div class="grade-fill ${fillClass}" style="width:${avg}%"></div></div>
+            </td>
+            <td style="text-align:center;color:${st.issues>0?'var(--red)':'var(--green)'}">${st.issues}</td>
+            <td style="font-size:10px">${gradeStr}</td>
+            <td style="text-align:center"><span class="badge ${topGrade}">${topGrade}</span></td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3. TOP ISSUES -->
+  <div class="section">
+    <div class="section-title">⚠️ 3. 미흡 항목 TOP ${Math.min(topIssues.length,10)} 분석 / Analisis Top Item Kurang</div>
+    ${topIssues.length===0
+      ? '<div class="empty-msg" style="padding:20px">✅ 미흡 항목이 없습니다</div>'
+      : `<table class="data-table">
+      <thead>
+        <tr><th style="width:40px">순위</th><th>점검 항목</th><th style="text-align:center">발생 횟수</th><th style="text-align:center">비율</th></tr>
+      </thead>
+      <tbody>
+        ${topIssues.map((item,i)=>`<tr>
+          <td><span class="rank-num ${i<3?'top':''}">${i+1}</span></td>
+          <td><strong style="font-size:11px">[${item.id}]</strong> ${item.name}</td>
+          <td style="text-align:center;font-weight:700;color:var(--red)">${item.cnt}회</td>
+          <td style="text-align:center">${Math.round(item.cnt/total*100)}%</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>`}
+  </div>
+
+  <!-- 4. CHARTS -->
+  <div class="section">
+    <div class="section-title">📈 4. 기간별 추이 차트 / Grafik Tren</div>
+    <div class="charts-row">
+      <div class="chart-box">
+        <h4>일별 점검 건수 / Jumlah Inspeksi per Hari</h4>
+        <canvas id="chart-trend-cnt"></canvas>
+      </div>
+      <div class="chart-box">
+        <h4>일별 평균 양호율 / Rata-rata Lulus per Hari</h4>
+        <canvas id="chart-trend-pass"></canvas>
+      </div>
+    </div>
+    <div style="margin-top:16px">
+      <div class="chart-box">
+        <h4>등급 분포 / Distribusi Grade</h4>
+        <canvas id="chart-grade" style="max-height:160px"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. EMPLOYEE -->
+  <div class="section">
+    <div class="section-title">👤 5. 직원별 점검 현황 / Status Inspeksi per Karyawan</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>직원명 / Nama</th>
+          <th>소속 지점 / Cabang</th>
+          <th style="text-align:center">점검 건수</th>
+          <th style="text-align:center">평균 양호율</th>
+          <th style="text-align:center">상태</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${Object.entries(empStats).sort((a,b)=>b[1].count-a[1].count).map(([name,st])=>{
+          const avg=Math.round(st.passSum/st.count);
+          const fillClass=avg>=90?'':avg>=70?'low':'bad';
+          return `<tr>
+            <td><strong>${name}</strong></td>
+            <td>${st.branch}</td>
+            <td style="text-align:center">${st.count}</td>
+            <td style="text-align:center">
+              ${avg}%
+              <div class="grade-bar"><div class="grade-fill ${fillClass}" style="width:${avg}%"></div></div>
+            </td>
+            <td style="text-align:center"><span class="emp-badge active">활성</span></td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="report-footer">
+    본 보고서는 지점 점검 시스템에서 자동 생성되었습니다 · Laporan ini dibuat otomatis oleh Sistem Inspeksi Cabang · ${genDate}
+  </div>
+  `;
+
+  // ── CHARTS ──
+  setTimeout(()=>{
+    // Trend count
+    const c1=new Chart(document.getElementById('chart-trend-cnt').getContext('2d'),{
+      type:'bar',
+      data:{labels:trendDates.map(d=>d.slice(5)),datasets:[{data:trendCnt,backgroundColor:'#1F4E7966',borderColor:'#1F4E79',borderWidth:1.5,borderRadius:4}]},
+      options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}}
+    });
+    chartObjs.push(c1);
+
+    // Trend pass rate
+    const c2=new Chart(document.getElementById('chart-trend-pass').getContext('2d'),{
+      type:'line',
+      data:{labels:trendDates.map(d=>d.slice(5)),datasets:[{data:trendPass,borderColor:'#1E7E34',backgroundColor:'#D4EDDA55',fill:true,tension:.35,pointRadius:4,pointBackgroundColor:'#1E7E34'}]},
+      options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%'}}}}
+    });
+    chartObjs.push(c2);
+
+    // Grade pie
+    const grades=Object.keys(gradeCnt).filter(g=>gradeCnt[g]>0);
+    const gradeColors={'S':'#1E7E34','A':'#0C5460','B':'#856404','C':'#C0392B','D':'#721C24'};
+    const c3=new Chart(document.getElementById('chart-grade').getContext('2d'),{
+      type:'doughnut',
+      data:{
+        labels:grades,
+        datasets:[{data:grades.map(g=>gradeCnt[g]),backgroundColor:grades.map(g=>gradeColors[g]||'#ccc')}]
+      },
+      options:{responsive:true,plugins:{legend:{position:'right',labels:{font:{size:12}}}}}
+    });
+    chartObjs.push(c3);
+  },100);
+}
+</script>
+</body>
+</html>
