@@ -827,12 +827,12 @@ function openDetail(i){
   document.getElementById('modal-title').textContent=`${s.branch} — ${s.date}`;
   document.getElementById('modal-body').innerHTML=`
     <div class="detail-meta">
-      <div class="meta-item"><div class="k">점검자</div><div class="v">${s.name}</div></div>
-      <div class="meta-item"><div class="k">점검 유형</div><div class="v">${s.type}</div></div>
-      <div class="meta-item"><div class="k">점검 주기</div><div class="v">${FREQ_LABEL[s.freq]||s.freq}</div></div>
+      <div class="meta-item"><div class="k">점검자</div><div class="v" style="color:#212529">${s.name}</div></div>
+      <div class="meta-item"><div class="k">점검 유형</div><div class="v" style="color:#212529">${s.type}</div></div>
+      <div class="meta-item"><div class="k">점검 주기</div><div class="v" style="color:#212529">${FREQ_LABEL[s.freq]||s.freq}</div></div>
       <div class="meta-item"><div class="k">양호율 / Tingkat Lulus</div><div class="v" style="color:${s.passRate>=80?'var(--green)':'var(--red)'}">${s.passRate}%</div></div>
       <div class="meta-item"><div class="k">종합 등급</div><div class="v"><span class="badge ${s.grade}">${s.grade}</span></div></div>
-      <div class="meta-item"><div class="k">양호 / 미흡</div><div class="v">${good.length} / ${bad.length}</div></div>
+      <div class="meta-item"><div class="k">양호 / 미흡</div><div class="v" style="color:#212529">${good.length} / ${bad.length}</div></div>
     </div>
     ${s.comment?`<div class="detail-section"><h4>총평 / Komentar</h4><p style="font-size:12px;line-height:1.5">${s.comment}</p></div>`:''}
     ${bad.length?`<div class="detail-section"><h4>⚠️ 미흡 항목 / Item Kurang (${bad.length}건)</h4>
