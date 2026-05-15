@@ -1,4 +1,4 @@
-const CACHE = 'inspeksi-v1';
+const CACHE = 'inspeksi-v2';
 const ASSETS = [
   './index.html',
   './manifest.json',
@@ -7,7 +7,6 @@ const ASSETS = [
   'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js'
 ];
 
-// Install: cache all assets
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE).then(cache => cache.addAll(ASSETS))
@@ -15,7 +14,6 @@ self.addEventListener('install', e => {
   self.skipWaiting();
 });
 
-// Activate: remove old caches
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
@@ -25,12 +23,12 @@ self.addEventListener('activate', e => {
   self.clients.claim();
 });
 
-// Fetch: network first, fallback to cache
 self.addEventListener('fetch', e => {
-  // Firebase requests: always network (never cache)
-  if(e.request.url.includes('firestore') || 
+  // Firebase 요청은 캐시 안함
+  if(e.request.url.includes('firestore') ||
      e.request.url.includes('firebase') ||
-     e.request.url.includes('googleapis')) {
+     e.request.url.includes('googleapis') ||
+     e.request.url.includes('gstatic')) {
     return;
   }
   e.respondWith(

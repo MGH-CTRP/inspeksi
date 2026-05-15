@@ -4,7 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Sistem Inspeksi Cabang | 지점 점검 시스템</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+
+  <!-- PWA -->
+  <meta name="theme-color" content="#1F4E79">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Inspeksi">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -221,6 +232,17 @@
   #my-history-list{width:100%}
   .info-box{background:#E8F0FE;border-radius:8px;padding:12px 14px;font-size:12px;line-height:1.6;color:#1558B0;margin-bottom:16px}
   .info-box strong{display:block;margin-bottom:4px}
+
+  /* PWA safe area (notch phones) */
+  @media(display-mode: standalone){
+    .app-header{
+      padding-top: max(10px, env(safe-area-inset-top));
+      padding-left: max(14px, env(safe-area-inset-left));
+      padding-right: max(14px, env(safe-area-inset-right));
+    }
+    body{ padding-bottom: env(safe-area-inset-bottom); }
+  }
+
 </style>
 </head>
 <body>
@@ -857,5 +879,16 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'),2800);
 }
 </script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js')
+      .then(r=>console.log('SW registered:', r.scope))
+      .catch(e=>console.log('SW error:', e));
+  });
+}
+</script>
+
 </body>
 </html>
