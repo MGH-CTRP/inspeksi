@@ -79,7 +79,7 @@
     --radius:10px;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  body{font-family:'Malgun Gothic','Noto Sans KR',Arial,sans-serif;background:#F0F2F5;color:var(--text);font-size:14px;min-height:100vh}
+  body{font-family:'Malgun Gothic','Noto Sans KR',Arial,sans-serif;background:#F0F2F5;color:var(--text);font-size:14px;min-height:100vh;overflow-x:hidden;max-width:100vw}
 
   /* HEADER */
   .app-header{background:#1F4E79;color:#fff;padding:10px 14px;display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);flex-wrap:wrap}
@@ -118,9 +118,9 @@
 
   /* FORM */
 /* 수정 후 */
-  .screen{display:none;padding:16px;background:#F0F2F5;min-height:calc(100vh - 100px)}
+  .screen{display:none;padding:12px;background:#F0F2F5;min-height:calc(100vh - 100px);width:100%;max-width:100%;box-sizing:border-box;overflow-x:hidden}
   .screen.active{display:block}
-  .form-card{background:#fff;border-radius:var(--radius);padding:14px 16px;margin-bottom:12px;box-shadow:var(--card-shadow)}
+  .form-card{background:#fff;border-radius:var(--radius);padding:14px 16px;margin-bottom:12px;box-shadow:var(--card-shadow);width:100%;box-sizing:border-box}
   .form-card h3{font-size:13px;font-weight:600;color:#1F4E79;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
   .field{margin-bottom:10px}
   .field label{display:block;font-size:11px;color:var(--gray4);margin-bottom:4px;font-weight:600}
@@ -128,7 +128,7 @@
   .field input:focus,.field select:focus{border-color:var(--blue)}
   .field textarea{resize:vertical;min-height:60px}
   .freq-tabs{display:flex;gap:6px;margin-bottom:12px}
-  .freq-tab{flex:1;padding:8px 4px;text-align:center;font-size:11px;border-radius:6px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-weight:500;transition:all .15s;line-height:1.4}
+  .freq-tab{flex:1;padding:8px 4px;text-align:center;font-size:11px;border-radius:6px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-weight:500;transition:all .15s;line-height:1.4;color:#212529}
   .freq-tab.daily.active{background:#E3F2FD;border-color:#1976D2;color:#1558B0}
   .freq-tab.weekly.active{background:#E8F5E9;border-color:#388E3C;color:#2E7D32}
   .freq-tab.monthly.active{background:#F3E5F5;border-color:#7B1FA2;color:#6A1B9A}
@@ -150,7 +150,7 @@
   .submit-btn:disabled{background:var(--gray3);cursor:not-allowed}
 
   /* DASHBOARD */
-  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;width:100%;box-sizing:border-box}
   .stat-card{background:#fff;border-radius:var(--radius);padding:14px 12px;box-shadow:var(--card-shadow);text-align:center}
   .stat-card .val{font-size:26px;font-weight:700;line-height:1.1}
   .stat-card .lbl{font-size:10px;color:var(--gray3);margin-top:3px;line-height:1.4}
@@ -158,20 +158,20 @@
   .stat-card.green .val{color:var(--green)}
   .stat-card.red .val{color:var(--red)}
   .stat-card.amber .val{color:var(--amber)}
-  .chart-card{background:#fff;border-radius:var(--radius);padding:14px;margin-bottom:12px;box-shadow:var(--card-shadow)}
+  .chart-card{background:#fff;border-radius:var(--radius);padding:14px;margin-bottom:12px;box-shadow:var(--card-shadow);width:100%;box-sizing:border-box}
   .chart-card h4{font-size:11px;font-weight:600;color:var(--gray4);margin-bottom:10px}
-  .sub-list{background:#fff;border-radius:var(--radius);box-shadow:var(--card-shadow);overflow:hidden}
+  .sub-list{background:#fff;border-radius:var(--radius);box-shadow:var(--card-shadow);overflow:hidden;width:100%;box-sizing:border-box}
    @media(max-width:360px){
     .sub-list-header,.sub-row{grid-template-columns:1fr 46px 38px 30px;font-size:9px;padding:7px 8px}
     .sub-row .branch{font-size:11px}
     .badge{padding:2px 4px;font-size:9px}
   }
-  .sub-list-header{display:grid;grid-template-columns:1fr 52px 42px 34px;gap:3px;padding:8px 10px;background:var(--gray);font-size:10px;font-weight:700;color:var(--gray4);border-bottom:1px solid var(--border);min-width:0}
-  .sub-row{display:grid;grid-template-columns:1fr 52px 42px 34px;gap:3px;padding:9px 10px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;align-items:center;min-width:0}
+  .sub-list-header{display:grid;grid-template-columns:1fr 72px 42px 36px;gap:3px;padding:8px 10px;background:var(--gray);font-size:10px;font-weight:700;color:#212529;border-bottom:1px solid var(--border);min-width:0;width:100%;box-sizing:border-box}
+  .sub-row{display:grid;grid-template-columns:1fr 72px 42px 36px;gap:3px;padding:9px 10px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;align-items:center;min-width:0;width:100%;box-sizing:border-box;color:#212529}
   .sub-row:last-child{border-bottom:none}
   .sub-row:active{background:var(--blue-light)}
-  .sub-row .branch{font-size:12px;font-weight:600}
-  .sub-row .who{font-size:10px;color:var(--gray3)}
+  .sub-row .branch{font-size:12px;font-weight:600;color:#212529}
+  .sub-row .who{font-size:10px;color:#495057}
   .badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600}
   .badge.S{background:#D4EDDA;color:var(--green)}
   .badge.A{background:#D1ECF1;color:#0C5460}
@@ -193,12 +193,12 @@
   .detail-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
   .meta-item{background:var(--gray);padding:8px 10px;border-radius:6px}
   .meta-item .k{font-size:10px;color:var(--gray3)}
-  .meta-item .v{font-size:13px;font-weight:600}
+  .meta-item .v{font-size:13px;font-weight:600;color:#212529}
   .detail-section{margin-bottom:12px}
   .detail-section h4{font-size:11px;font-weight:700;color:#1F4E79;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--border)}
-  .detail-item{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:1px solid var(--gray2);font-size:11px;gap:8px}
+  .detail-item{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:1px solid var(--gray2);font-size:11px;gap:8px;color:#212529}
   .detail-item:last-child{border-bottom:none}
-  .detail-item .txt{flex:1;line-height:1.4}
+  .detail-item .txt{flex:1;line-height:1.4;color:#212529}
   .detail-item .remark-txt{font-size:10px;color:var(--amber);margin-top:2px}
 
   /* TOAST */
@@ -213,8 +213,8 @@
   .empty div{font-size:28px;margin-bottom:8px}
 
   /* FILTER */
-  .filter-bar{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
-  .filter-chip{padding:5px 12px;border-radius:14px;font-size:11px;border:1.5px solid var(--border);background:#fff;cursor:pointer;white-space:nowrap;font-family:inherit;font-weight:500}
+  .filter-bar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+  .filter-chip{padding:5px 10px;border-radius:14px;font-size:11px;border:1.5px solid var(--border);background:#fff;cursor:pointer;white-space:nowrap;font-family:inherit;font-weight:600;color:#212529}
   .filter-chip.active{background:#1F4E79;border-color:#1F4E79;color:#fff}
   .section-lbl{font-size:11px;font-weight:700;color:var(--gray4);margin-bottom:8px;margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
   #my-history-list{width:100%}
@@ -222,20 +222,20 @@
   .info-box strong{display:block;margin-bottom:4px}
 
   /* ── POPUP MODAL ── */
-  .popup-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center;padding:24px}
+  .popup-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);z-index:500;align-items:center;justify-content:center;padding:24px}
   .popup-overlay.open{display:flex}
-  .popup-box{background:#fff;border-radius:14px;width:100%;max-width:320px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.25);animation:popIn .2s ease}
+  .popup-box{background:#fff;border-radius:16px;width:100%;max-width:300px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.25);animation:popIn .2s ease}
   @keyframes popIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
-  .popup-icon{font-size:44px;text-align:center;padding:28px 20px 12px}
+  .popup-icon{font-size:48px;text-align:center;padding:28px 20px 10px}
   .popup-title{font-size:16px;font-weight:700;text-align:center;padding:0 20px 8px;color:#212529}
-  .popup-msg{font-size:13px;text-align:center;padding:0 20px 20px;color:#555;line-height:1.6}
-  .popup-btn{width:100%;padding:14px;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s}
-  .popup-btn.ok{background:#1F4E79;color:#fff}
-  .popup-btn.ok:hover{background:#163d61}
-  .popup-btn.ok.green{background:#1E7E34}
-  .popup-btn.ok.green:hover{background:#155724}
-  .popup-btn.ok.red{background:#C0392B}
-  .popup-btn.ok.red:hover{background:#922b21}
+  .popup-msg{font-size:13px;text-align:center;padding:0 20px 24px;color:#555;line-height:1.7;white-space:pre-line}
+  .popup-btn{width:100%;padding:15px;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s;letter-spacing:.3px}
+  .popup-btn.green{background:#1E7E34;color:#fff}
+  .popup-btn.green:hover{background:#155724}
+  .popup-btn.red{background:#C0392B;color:#fff}
+  .popup-btn.red:hover{background:#922b21}
+  .popup-btn.blue{background:#1F4E79;color:#fff}
+  .popup-btn.blue:hover{background:#163d61}
 </style>
 </head>
 <body>
@@ -306,12 +306,12 @@
 </div>
 
 <!-- STAFF -->
-<div id="screen-staff" style="display:none">
+<div id="screen-staff" style="display:none;width:100%;overflow-x:hidden">
   <div class="tabs">
     <div class="tab active" onclick="staffTab('form')">📝 Input Inspeksi<br><small>점검 입력</small></div>
     <div class="tab" onclick="staffTab('history')">📁 Riwayat Saya<br><small>내 제출 내역</small></div>
   </div>
-  <div id="staff-form" class="screen active" style="padding-top:12px">
+  <div id="staff-form" class="screen active" style="padding-top:12px;width:100%;overflow-x:hidden">
     <div class="form-card">
       <h3>Informasi Dasar / 기본 정보</h3>
       <div class="field"><label>Nama Toko / 점포명</label>
@@ -363,19 +363,19 @@
     <button class="submit-btn" id="btn-submit" onclick="submitForm()">✅ Kirim Hasil Inspeksi / 점검 결과 제출</button>
     <div style="height:20px"></div>
   </div>
-  <div id="staff-history" class="screen" style="padding-top:12px">
+  <div id="staff-history" class="screen" style="padding-top:12px;width:100%;overflow-x:hidden">
     <div class="section-lbl">Riwayat Inspeksi Saya / 내가 제출한 점검 내역</div>
     <div id="my-history-list"><div class="loading"><div class="spinner"></div><br>loading...</div></div>
   </div>
 </div>
 
 <!-- MANAGER -->
-<div id="screen-manager" style="display:none">
+<div id="screen-manager" style="display:none;width:100%;overflow-x:hidden">
   <div class="tabs">
     <div class="tab active" onclick="mgrTab('dash')">📊 대시보드<br><small>Dashboard</small></div>
     <div class="tab" onclick="mgrTab('list')">📋 전체 내역<br><small>Semua Data</small></div>
   </div>
-  <div id="mgr-dash" class="screen active" style="padding-top:12px">
+  <div id="mgr-dash" class="screen active" style="padding-top:12px;width:100%;overflow-x:hidden">
     <div class="stat-grid" id="stat-grid">
       <div class="loading" style="grid-column:span 2"><div class="spinner"></div><br>데이터 불러오는 중...</div>
     </div>
@@ -390,13 +390,13 @@
     <div class="section-lbl">최근 점검 내역 / Inspeksi Terbaru (클릭 → 상세 / Klik → Detail)</div>
     <div class="sub-list" id="recent-list"></div>
   </div>
-  <div id="mgr-list" class="screen" style="padding-top:12px">
+  <div id="mgr-list" class="screen" style="padding-top:12px;width:100%;overflow-x:hidden">
     <div class="filter-bar">
-      <button class="filter-chip active" onclick="setFilter('all',this)">전체<br>Semua</button>
-      <button class="filter-chip" onclick="setFilter('daily',this)">매일<br>Harian</button>
-      <button class="filter-chip" onclick="setFilter('weekly',this)">매주<br>Mingguan</button>
-      <button class="filter-chip" onclick="setFilter('monthly',this)">매월<br>Bulanan</button>
-      <button class="filter-chip" onclick="setFilter('불시',this)">불시<br>Mendadak</button>
+      <button class="filter-chip active" onclick="setFilter('all',this)">All</button>
+      <button class="filter-chip" onclick="setFilter('daily',this)">Day</button>
+      <button class="filter-chip" onclick="setFilter('weekly',this)">Week</button>
+      <button class="filter-chip" onclick="setFilter('monthly',this)">Month</button>
+      <button class="filter-chip" onclick="setFilter('불시',this)">Raid</button>
     </div>
     <div class="sub-list" id="all-list"></div>
   </div>
@@ -452,23 +452,22 @@
 <div class="toast" id="toast"></div>
 
 <script>
-
 // ── POPUP ─────────────────────────────────────────
-let _popupCallback = null;
-function showPopup(type, title, msg, callback){
-  const icons = {error:'❌', success:'✅', warning:'⚠️', info:'ℹ️'};
-  const btnColors = {error:'red', success:'green', warning:'', info:''};
-  document.getElementById('popup-icon').textContent = icons[type]||'ℹ️';
-  document.getElementById('popup-title').textContent = title;
-  document.getElementById('popup-msg').textContent = msg;
-  const btn = document.getElementById('popup-btn');
-  btn.className = 'popup-btn ok ' + (btnColors[type]||'');
-  _popupCallback = callback || null;
+let _popupCb=null;
+function showPopup(type,title,msg,cb){
+  const icons={error:'❌',success:'✅',warning:'⚠️',info:'ℹ️'};
+  const colors={error:'red',success:'green',warning:'blue',info:'blue'};
+  document.getElementById('popup-icon').textContent=icons[type]||'ℹ️';
+  document.getElementById('popup-title').textContent=title;
+  document.getElementById('popup-msg').textContent=msg;
+  const btn=document.getElementById('popup-btn');
+  btn.className='popup-btn '+(colors[type]||'blue');
+  _popupCb=cb||null;
   document.getElementById('popup-overlay').classList.add('open');
 }
 function closePopup(){
   document.getElementById('popup-overlay').classList.remove('open');
-  if(_popupCallback){ _popupCallback(); _popupCallback=null; }
+  if(_popupCb){_popupCb();_popupCb=null;}
 }
 
 const DAILY_ITEMS = [
@@ -525,13 +524,22 @@ async function doLogin() {
   const pw=document.getElementById('login-pw').value;
   const btn=document.getElementById('btn-login');
   const err=document.getElementById('login-error');
-  if(!email||!pw){err.textContent='Masukkan email dan kata sandi Anda. / 이메일과 비밀번호를 입력하세요.';return;}
+  if(!email||!pw){
+    showPopup('warning','입력 오류 / Input Kosong',
+      '이메일과 비밀번호를 모두 입력해 주세요.
+Mohon isi email dan password terlebih dahulu.');
+    return;
+  }
   btn.disabled=true; btn.textContent='Memproses... / 로그인 중...'; err.textContent='';
   try {
     await window._firebase.signInWithEmailAndPassword(window._auth,email,pw);
   } catch(e) {
-    err.textContent=loginErrorMsg(e.code);
-    btn.disabled=false; btn.textContent='Masuk / 로그인';
+    showPopup('error','로그인 실패 / Login Gagal', loginErrorMsg(e.code), ()=>{
+      btn.disabled=false;
+      btn.textContent='Masuk / 로그인';
+      document.getElementById('login-pw').value='';
+      document.getElementById('login-pw').focus();
+    });
   }
 }
 
@@ -550,7 +558,7 @@ async function doRegister() {
     const {createUserWithEmailAndPassword,doc,setDoc}=window._firebase;
     const cred=await createUserWithEmailAndPassword(window._auth,email,pw);
     await setDoc(doc(window._db,'users',cred.user.uid),{name,branch,role,email,createdAt:new Date().toISOString()});
-    showPopup('success','등록 완료 / Pendaftaran Berhasil','계정이 등록되었습니다. 로그인해 주세요.\nAkun berhasil dibuat. Silakan login.');
+    showToast('✅ Akun berhasil terdaftar! / 계정이 등록되었습니다!');
   } catch(e) {
     err.textContent=loginErrorMsg(e.code);
     btn.disabled=false; btn.textContent='Daftar / 계정 등록';
@@ -730,7 +738,8 @@ async function submitForm() {
   const date=document.getElementById('f-date').value;
   if(!branch||!name||!date){
     showPopup('warning','입력 오류 / Data Belum Lengkap',
-      '점포명, 점검자 성명, 날짜를 모두 입력해 주세요.\nNama toko, pemeriksa, dan tanggal harus diisi.');
+      '점포명, 점검자, 날짜를 모두 입력해 주세요.
+Nama toko, pemeriksa, dan tanggal harus diisi.');
     return;
   }
   const items=FREQ_MAP[currentFreq];
@@ -754,16 +763,17 @@ async function submitForm() {
   btn.disabled=true; btn.textContent='Mengirim... / 제출 중...';
   try {
     await saveSubmission(sub);
-    showPopup('success',
-      'Berhasil Dikirim! / 제출 완료',
-      '점검 결과가 성공적으로 제출되었습니다.\nHasil inspeksi berhasil dikirim ke server.',
-      ()=>{ renderChecklist(); setTimeout(()=>staffTab('history'),300); }
-    );
     document.getElementById('f-comment').value='';
-    renderChecklist();
-    setTimeout(()=>staffTab('history'),1200);
-  } catch(e){showPopup('error','제출 실패 / Pengiriman Gagal',
-      '제출 중 오류가 발생했습니다. 다시 시도해 주세요.\nTerjadi kesalahan. Silakan coba lagi.\n(' + e.message + ')');}
+    showPopup('success','제출 완료 / Berhasil Dikirim!',
+      '점검 결과가 성공적으로 제출되었습니다!
+Hasil inspeksi berhasil dikirim ke server.',
+      ()=>{ renderChecklist(); staffTab('history'); });
+  } catch(e){
+    showPopup('error','제출 실패 / Pengiriman Gagal',
+      '제출 중 오류가 발생했습니다. 다시 시도해 주세요.
+Terjadi kesalahan. Silakan coba lagi.
+('+e.message+')');
+  }
   finally{btn.disabled=false;btn.textContent='✅ Kirim Hasil Inspeksi / 점검 결과 제출';}
 }
 
@@ -853,12 +863,12 @@ function setFilter(f,el){
 }
 
 function buildSubListHTML(subs){
-  return '<div class="sub-list-header"><div>Pemeriksa<br>지점</div><div>Tanggal<br>날짜</div><div>Siklus<br>주기</div><div>Grade<br>등급</div></div>'
+  return '<div class="sub-list-header"><div style="color:#212529">점검자 / Nama</div><div style="color:#212529">날짜 / Tgl</div><div style="color:#212529">주기</div><div style="color:#212529">Grade</div></div>'
     +subs.map((s,i)=>`
     <div class="sub-row" onclick="openDetail(${i})">
-      <div><div class="branch">${s.branch}</div><div class="who">${s.name}</div></div>
-      <div style="font-size:11px">${s.date}</div>
-      <div><span class="badge ${s.freq}">${s.freq==='daily'?'매일':s.freq==='weekly'?'매주':'매월'}</span></div>
+      <div><div class="branch" style="color:#212529;font-weight:600">${s.name}</div><div class="who" style="color:#495057;font-size:10px">${s.branch}</div></div>
+      <div style="font-size:11px;color:#212529">${s.date}</div>
+      <div><span class="badge ${s.freq}">${s.freq==='daily'?'Day':s.freq==='weekly'?'Week':'Month'}</span></div>
       <div><span class="badge ${s.grade}">${s.grade}</span></div>
     </div>`).join('');
 }
@@ -871,12 +881,12 @@ function openDetail(i){
   document.getElementById('modal-title').textContent=`${s.branch} — ${s.date}`;
   document.getElementById('modal-body').innerHTML=`
     <div class="detail-meta">
-      <div class="meta-item"><div class="k">점검자</div><div class="v">${s.name}</div></div>
-      <div class="meta-item"><div class="k">점검 유형</div><div class="v">${s.type}</div></div>
-      <div class="meta-item"><div class="k">점검 주기</div><div class="v">${FREQ_LABEL[s.freq]||s.freq}</div></div>
+      <div class="meta-item"><div class="k">점검자</div><div class="v" style="color:#212529">${s.name}</div></div>
+      <div class="meta-item"><div class="k">점검 유형</div><div class="v" style="color:#212529">${s.type||'-'}</div></div>
+      <div class="meta-item"><div class="k">점검 주기</div><div class="v" style="color:#212529">${s.freq==='daily'?'매일':s.freq==='weekly'?'매주':'매월'}</div></div>
       <div class="meta-item"><div class="k">양호율 / Tingkat Lulus</div><div class="v" style="color:${s.passRate>=80?'var(--green)':'var(--red)'}">${s.passRate}%</div></div>
       <div class="meta-item"><div class="k">종합 등급</div><div class="v"><span class="badge ${s.grade}">${s.grade}</span></div></div>
-      <div class="meta-item"><div class="k">양호 / 미흡</div><div class="v">${good.length} / ${bad.length}</div></div>
+      <div class="meta-item"><div class="k">양호 / 미흡</div><div class="v" style="color:#212529">${good.length} / ${bad.length}</div></div>
     </div>
     ${s.comment?`<div class="detail-section"><h4>총평 / Komentar</h4><p style="font-size:12px;line-height:1.5">${s.comment}</p></div>`:''}
     ${bad.length?`<div class="detail-section"><h4>⚠️ 미흡 항목 / Item Kurang (${bad.length}건)</h4>
@@ -907,7 +917,7 @@ function showToast(msg){
     <div class="popup-icon" id="popup-icon">⚠️</div>
     <div class="popup-title" id="popup-title"></div>
     <div class="popup-msg" id="popup-msg"></div>
-    <button class="popup-btn ok" id="popup-btn" onclick="closePopup()">확인 / OK</button>
+    <button class="popup-btn blue" id="popup-btn" onclick="closePopup()">확인 / OK</button>
   </div>
 </div>
 </body>
