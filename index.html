@@ -91,7 +91,7 @@
     --radius:10px;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  body{font-family:'Malgun Gothic','Noto Sans KR',Arial,sans-serif;background:#F0F2F5;color:var(--text);font-size:14px;min-height:100vh}
+  body{font-family:'Malgun Gothic','Noto Sans KR',Arial,sans-serif;background:#F0F2F5;color:var(--text);font-size:14px;min-height:100vh;overflow-x:hidden;max-width:100vw}
 
   /* HEADER */
   .app-header{background:#1F4E79;color:#fff;padding:10px 14px;display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);flex-wrap:wrap}
@@ -130,9 +130,9 @@
 
   /* FORM */
 /* 수정 후 */
-  .screen{display:none;padding:16px;background:#F0F2F5;min-height:calc(100vh - 100px)}
+  .screen{display:none;padding:12px;background:#F0F2F5;min-height:calc(100vh - 100px);width:100%;box-sizing:border-box;overflow-x:hidden}
   .screen.active{display:block}
-  .form-card{background:#fff;border-radius:var(--radius);padding:14px 16px;margin-bottom:12px;box-shadow:var(--card-shadow)}
+  .form-card{background:#fff;border-radius:var(--radius);padding:14px 16px;margin-bottom:12px;box-shadow:var(--card-shadow);width:100%;box-sizing:border-box}
   .form-card h3{font-size:13px;font-weight:600;color:#1F4E79;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
   .field{margin-bottom:10px}
   .field label{display:block;font-size:11px;color:var(--gray4);margin-bottom:4px;font-weight:600}
@@ -162,7 +162,7 @@
   .submit-btn:disabled{background:var(--gray3);cursor:not-allowed}
 
   /* DASHBOARD */
-  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;width:100%;box-sizing:border-box}
   .stat-card{background:#fff;border-radius:var(--radius);padding:14px 12px;box-shadow:var(--card-shadow);text-align:center}
   .stat-card .val{font-size:26px;font-weight:700;line-height:1.1}
   .stat-card .lbl{font-size:10px;color:var(--gray3);margin-top:3px;line-height:1.4}
@@ -170,16 +170,16 @@
   .stat-card.green .val{color:var(--green)}
   .stat-card.red .val{color:var(--red)}
   .stat-card.amber .val{color:var(--amber)}
-  .chart-card{background:#fff;border-radius:var(--radius);padding:14px;margin-bottom:12px;box-shadow:var(--card-shadow)}
+  .chart-card{background:#fff;border-radius:var(--radius);padding:14px;margin-bottom:12px;box-shadow:var(--card-shadow);width:100%;box-sizing:border-box}
   .chart-card h4{font-size:11px;font-weight:600;color:var(--gray4);margin-bottom:10px}
-  .sub-list{background:#fff;border-radius:var(--radius);box-shadow:var(--card-shadow);overflow:hidden}
+  .sub-list{background:#fff;border-radius:var(--radius);box-shadow:var(--card-shadow);overflow:hidden;width:100%;box-sizing:border-box}
    @media(max-width:360px){
     .sub-list-header,.sub-row{grid-template-columns:1fr 46px 38px 30px;font-size:9px;padding:7px 8px}
     .sub-row .branch{font-size:11px}
     .badge{padding:2px 4px;font-size:9px}
   }
-  .sub-list-header{display:grid;grid-template-columns:1fr 52px 42px 34px;gap:3px;padding:8px 10px;background:var(--gray);font-size:10px;font-weight:700;color:var(--gray4);border-bottom:1px solid var(--border);min-width:0}
-  .sub-row{display:grid;grid-template-columns:1fr 52px 42px 34px;gap:3px;padding:9px 10px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;align-items:center;min-width:0}
+  .sub-list-header{display:grid;grid-template-columns:1fr 72px 42px 36px;gap:3px;padding:8px 10px;background:var(--gray);font-size:10px;font-weight:700;color:#212529;border-bottom:1px solid var(--border);min-width:0;width:100%;box-sizing:border-box}
+  .sub-row{display:grid;grid-template-columns:1fr 72px 42px 36px;gap:3px;padding:9px 10px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;align-items:center;min-width:0;width:100%;box-sizing:border-box;color:#212529}
   .sub-row:last-child{border-bottom:none}
   .sub-row:active{background:var(--blue-light)}
   .sub-row .branch{font-size:12px;font-weight:600}
@@ -225,7 +225,7 @@
   .empty div{font-size:28px;margin-bottom:8px}
 
   /* FILTER */
-  .filter-bar{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+  .filter-bar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
   .filter-chip{padding:5px 12px;border-radius:14px;font-size:11px;border:1.5px solid var(--border);background:#fff;cursor:pointer;white-space:nowrap;font-family:inherit;font-weight:500}
   .filter-chip.active{background:#1F4E79;border-color:#1F4E79;color:#fff}
   .section-lbl{font-size:11px;font-weight:700;color:var(--gray4);margin-bottom:8px;margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
@@ -313,12 +313,12 @@
 </div>
 
 <!-- STAFF -->
-<div id="screen-staff" style="display:none">
+<div id="screen-staff" style="display:none;width:100%;overflow-x:hidden">
   <div class="tabs">
     <div class="tab active" onclick="staffTab('form')">📝 Input Inspeksi<br><small>점검 입력</small></div>
     <div class="tab" onclick="staffTab('history')">📁 Riwayat Saya<br><small>내 제출 내역</small></div>
   </div>
-  <div id="staff-form" class="screen active" style="padding-top:12px">
+  <div id="staff-form" class="screen active" style="padding-top:12px;width:100%;overflow-x:hidden">
     <div class="form-card">
       <h3>Informasi Dasar / 기본 정보</h3>
       <div class="field"><label>Nama Toko / 점포명</label>
@@ -370,19 +370,19 @@
     <button class="submit-btn" id="btn-submit" onclick="submitForm()">✅ Kirim Hasil Inspeksi / 점검 결과 제출</button>
     <div style="height:20px"></div>
   </div>
-  <div id="staff-history" class="screen" style="padding-top:12px">
+  <div id="staff-history" class="screen" style="padding-top:12px;width:100%;overflow-x:hidden">
     <div class="section-lbl">Riwayat Inspeksi Saya / 내가 제출한 점검 내역</div>
     <div id="my-history-list"><div class="loading"><div class="spinner"></div><br>loading...</div></div>
   </div>
 </div>
 
 <!-- MANAGER -->
-<div id="screen-manager" style="display:none">
+<div id="screen-manager" style="display:none;width:100%;overflow-x:hidden">
   <div class="tabs">
     <div class="tab active" onclick="mgrTab('dash')">📊 대시보드<br><small>Dashboard</small></div>
     <div class="tab" onclick="mgrTab('list')">📋 전체 내역<br><small>Semua Data</small></div>
   </div>
-  <div id="mgr-dash" class="screen active" style="padding-top:12px">
+  <div id="mgr-dash" class="screen active" style="padding-top:12px;width:100%;overflow-x:hidden">
     <div class="stat-grid" id="stat-grid">
       <div class="loading" style="grid-column:span 2"><div class="spinner"></div><br>데이터 불러오는 중...</div>
     </div>
@@ -397,7 +397,7 @@
     <div class="section-lbl">최근 점검 내역 / Inspeksi Terbaru (클릭 → 상세 / Klik → Detail)</div>
     <div class="sub-list" id="recent-list"></div>
   </div>
-  <div id="mgr-list" class="screen" style="padding-top:12px">
+  <div id="mgr-list" class="screen" style="padding-top:12px;width:100%;overflow-x:hidden">
     <div class="filter-bar">
       <button class="filter-chip active" onclick="setFilter('all',this)">전체<br>Semua</button>
       <button class="filter-chip" onclick="setFilter('daily',this)">매일<br>Harian</button>
